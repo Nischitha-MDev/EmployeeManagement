@@ -1,0 +1,74 @@
+
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Login</title>
+    <link rel="stylesheet" type="text/css" href="home.css" />
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <script>
+    var response =  {};
+        function loadEmployee()
+        {
+        	var params  = new URLSearchParams(window.location.href.split("?")[1]);
+
+            var id = params.get("id");
+            var name = params.get("name");
+            console.log(id);
+            console.log(name);
+            getEmployee(id, name);
+            console.log(response);
+        }
+        function getEmployee( id, name)
+        {
+        	const req = new XMLHttpRequest();
+            req.open("GET", "http://localhost:8080/fetch/dependants?id="+id+"&name="+name+"");
+            req.setRequestHeader("Content-Type", "application/json");
+            req.onload = function(e) {
+               response = JSON.parse(req.response);
+               var incr=1;
+               for (var i in response.data)
+            	   {
+            	   var data = response.data[i];
+            	   document.getElementById('Relation'+incr).innerHTML = data["Relation"];
+            	   document.getElementById('Name'+incr).innerHTML = data["Name"];
+            	   document.getElementById('Age'+incr).innerHTML = data["Age"];
+            	   incr++;
+            	   }
+
+            };
+            req.send();
+        }
+    </script>
+</head>
+<body onload="loadEmployee()">
+    
+<table id="customers">
+	<tr>
+	<th colspan="3" style="text-align: center; font-size: 25px;">Dependants Information</th>
+	</tr>
+  <tr>
+    <th>Relation</th>
+    <th>Name</th>
+    <th>Age</th>
+  </tr>
+  <tr>
+    <td><div id="Relation1"></div></td>
+    <td><div id="Name1"></div></td>
+    <td><div id="Age1"></div></td>
+  </tr>
+ <tr>
+    <td><div id="Relation2"></div></td>
+    <td><div id="Name2"></div></td>
+    <td><div id="Age2"></div></td>
+  </tr>
+  <tr>
+    <td><div id="Relation3"></div></td>
+    <td><div id="Name3"></div></td>
+    <td><div id="Age3"></div></td>
+  </tr>
+  
+  
+</table>
+</body>
+</html>

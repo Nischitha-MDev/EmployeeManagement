@@ -1,0 +1,80 @@
+
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Login</title>
+    <link rel="stylesheet" type="text/css" href="home.css" />
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <script>
+    var response =  {};
+        function loadEmployee()
+        {
+        	
+        	var params  = new URLSearchParams(window.location.href.split("?")[1]);
+
+            var id = params.get("id");
+            var name = params.get("name");
+            console.log(id);
+            console.log(name);
+            getEmployee(id, name);
+            console.log(response);
+        }
+        function getEmployee( id, name)
+        {
+        	const req = new XMLHttpRequest();
+            req.open("GET", "http://localhost:8080/fetch/employee?id="+id+"&name="+name+"");
+            req.setRequestHeader("Content-Type", "application/json");
+            req.onload = function(e) {
+               response = JSON.parse(req.response);
+               document.getElementById('Employeeid').innerHTML = response.id;
+               document.getElementById('EmployeeName').innerHTML = response.name;
+               document.getElementById('Department').innerHTML = response["department"].name;
+               document.getElementById('Designation').innerHTML = response["designation"].name;
+               
+            };
+            req.send();
+        }
+        function forwardToFetchDependants()
+        {
+        	var params  = new URLSearchParams(window.location.href.split("?")[1]);
+            var id = params.get("id");
+            var name = params.get("name");
+        	window.location.href="http://localhost:8080/dependant.html?id="+id+"&name="+name+"";
+        }
+    </script>
+</head>
+<body onload="loadEmployee()">
+    
+<table id="customers">
+	<tr>
+	<th colspan="2" style="text-align: center; font-size: 25px;">Employee Information</th>
+	</tr>
+  <tr>
+    <th>Company</th>
+    <th>Contact</th>
+  </tr>
+  <tr>
+    <td>Employee Id</td>
+    <td><div id="Employeeid"></div></td>
+  </tr>
+  <tr>
+    <td>Employee Name</td>
+    <td><div id="EmployeeName"></div></td>
+  </tr>
+  <tr>
+    <td>Department</td>
+    <td><div id="Department"></div></td>
+  </tr>
+  <tr>
+    <td>Designation</td>
+    <td><div id="Designation"></div></td>
+  </tr>
+  
+  <tr>
+    <td>Dependents</td>
+    <td><button onclick = "forwardToFetchDependants()">Click for Dependents</button></td>
+  </tr>
+</table>
+</body>
+</html>
